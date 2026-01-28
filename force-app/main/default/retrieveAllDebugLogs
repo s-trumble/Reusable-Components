@@ -12,6 +12,6 @@ foreach ($logId in $logIds) {
     $logId = $logId.Trim() 
     if (![string]::IsNullOrWhiteSpace($logId)) { 
         Write-Host "writing log/$logId.debug" 
-        sfdx force:apex:log:get --logid $logId | Out-File -FilePath "log/$logId.debug" -Encoding utf8 
+        sfdx force:apex:log:get --log-id $logId | Out-File -FilePath "log/$logId.debug" -Encoding utf8 
     } 
 } 
