@@ -1,0 +1,17 @@
+I used the below pasted directly into VS Code terminal (that is connected to the salesforce org) window to pull all logs:   
+
+
+# Ensure the log folder exists 
+New-Item -ItemType Directory -Force -Path "log" | Out-Null 
+
+# Query all ApexLog IDs from Salesforce (CSV output, skip header) 
+$logIds = sfdx force:data:soql:query -q "SELECT Id FROM ApexLog" --result-format csv | Select-Object -Skip 1 
+
+# Iterate through each log ID 
+foreach ($logId in $logIds) { 
+    $logId = $logId.Trim() 
+    if (![string]::IsNullOrWhiteSpace($logId)) { 
+        Write-Host "writing log/$logId.debug" 
+        sfdx force:apex:log:get --logid $logId | Out-File -FilePath "log/$logId.debug" -Encoding utf8 
+    } 
+} 
